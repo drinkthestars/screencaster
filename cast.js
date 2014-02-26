@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+console.log("INSIDE CAST.JS");
 //THIS WHOLE BLOB IS A FUNC. YAY
 (function() {
-  'use strict';
+
+console.log("INSIDE CAST.JS -> FUNCTION");
+
+'use strict';
 
 /**
  * Media source root URL
@@ -69,6 +72,7 @@ var PLAYER_STATE = {
  *  - Current media variables for transition between Cast and local modes
  */
 var CastPlayer = function() {
+  console.log("INSIDE CAST.JS -> FUNCTION -> var CASTPLAYER");
   /* device variables */
   // @type {DEVICE_STATE} A state for device
   this.deviceState = DEVICE_STATE.IDLE;
