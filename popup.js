@@ -1,4 +1,4 @@
-window.onload=function(){
+// window.onload=function(){
   // var vid = document.getElementsByTagName('video')[0];
   // console.log("VIDEO - ", vid);
 
@@ -35,4 +35,4 @@ window.onload=function(){
 
   // Fire the loading
   head.appendChild(script);
-};
+// };

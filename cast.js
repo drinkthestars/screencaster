@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-console.log("INSIDE CAST.JS");
+console.log("****INSIDE CAST.JS****");
 //THIS WHOLE BLOB IS A FUNC. YAY
 (function() {
 
-console.log("INSIDE CAST.JS -> FUNCTION");
+console.log("****INSIDE CAST.JS -> FUNCTION****");
 
 'use strict';
 
@@ -72,7 +72,7 @@ var PLAYER_STATE = {
  *  - Current media variables for transition between Cast and local modes
  */
 var CastPlayer = function() {
-  console.log("INSIDE CAST.JS -> FUNCTION -> var CASTPLAYER");
+  console.log("****INSIDE CAST.JS -> FUNCTION -> var CASTPLAYER****");
   /* device variables */
   // @type {DEVICE_STATE} A state for device
   this.deviceState = DEVICE_STATE.IDLE;
@@ -116,8 +116,9 @@ var CastPlayer = function() {
   /* media contents from JSON */
   this.mediaContents = null;
 
+  console.log("=====> WHAT IS THIS", this);
   this.initializeCastPlayer();
-  console.log("CAST LOADDEDDDDDD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  console.log("=====> CAST LOADDEDDDDDD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   this.initializeLocalPlayer();
 };
 
@@ -126,7 +127,8 @@ var CastPlayer = function() {
  */
 CastPlayer.prototype.initializeLocalPlayer = function() {
   this.localPlayer = document.getElementsByTagName('video')[0];
-  console.log("=====INIT LOCAL PLAYER");
+  console.log("=====> INIT LOCAL PLAYER");
+  this.screenYahoo();
 };
 
 /**
@@ -340,7 +342,6 @@ CastPlayer.prototype.loadMedia = function(mediaIndex) {
   // document.getElementById("media_subtitle").innerHTML = this.mediaContents[this.currentMediaIndex]['subtitle'];
   // document.getElementById("media_desc").innerHTML = this.mediaContents[this.currentMediaIndex]['description'];
 
-  console.log("MEDIA INFO!!!!!!!!!!!!!!!!");
   console.log(mediaInfo);
 };
 
@@ -923,8 +924,8 @@ CastPlayer.prototype.initializeUI = function() {
 
 CastPlayer.prototype.screenYahoo = function() {
   var vid = document.getElementsByTagName('video')[0];
-  console.log("VIDEO - ", vid);
-
+  console.log("====> VIDEO OBJECT: ", vid);
+  console.log("====> BINDING LISTENERS TO PLAY/PLAUSE");
   vid.addEventListener('play', this.playMedia.bind(this));
   vid.addEventListener('pause', this.pauseMedia.bind(this));
 };
@@ -1163,6 +1164,13 @@ var mediaJSON = { "categories" : [ { "name" : "Movies",
               "title" : "What care can you get for a grand?"
             }
     ]}]};
+//FIRST ATTEMPT
+// var CP = new CastPlayer();
+// console.log("CAST PLAYER IS : ", CastPlayer);
 
- window.CastPlayer = CastPlayer;
+//TECHNICALLY THIS SHUD WORK
+window.CastPlayer = new CastPlayer();
+//OLD SHIT
+ // window.CastPlayer = CastPlayer;
+ // console.log("WINDOW.CASTPLAYER = ", window.CastPlayer);
 })();
