@@ -26,7 +26,7 @@
   var head = document.getElementsByTagName('head')[0];
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src = chrome.extension.getURL('cast.js');
+  script.src = chrome.extension.getURL('helloVid.js');
 
   // // Then bind the event to the callback function.
   // // There are several events for cross browser compatibility.

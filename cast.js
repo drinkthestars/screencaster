@@ -14,7 +14,7 @@
 
 console.log("****INSIDE CAST.JS****");
 //THIS WHOLE BLOB IS A FUNC. YAY
-(function() {
+// (function() {
 
 console.log("****INSIDE CAST.JS -> FUNCTION****");
 
@@ -119,7 +119,7 @@ var CastPlayer = function() {
   console.log("=====> WHAT IS THIS", this);
   this.initializeCastPlayer();
   console.log("=====> CAST LOADDEDDDDDD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-  this.initializeLocalPlayer();
+  // this.initializeLocalPlayer();
 };
 
 /**
@@ -138,11 +138,14 @@ CastPlayer.prototype.initializeLocalPlayer = function() {
  * receiverListener may be invoked at any time afterwards, and possibly more than once. 
  */
 CastPlayer.prototype.initializeCastPlayer = function() {
+  console.log("CHROME CAST OBJ: ", chrome.cast);
+  console.log("CHROME OJB: ", chrome);
 
   if (!chrome.cast || !chrome.cast.isAvailable) {
-    setTimeout(this.initializeCastPlayer.bind(this), 1000);
+    setTimeout(this.initializeCastPlayer.bind(this), 3000);
     return;
   }
+
   // default set to the default media receiver app ID
   // optional: you may change it to point to your own
   var applicationID = chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID;
@@ -164,6 +167,7 @@ CastPlayer.prototype.initializeCastPlayer = function() {
  * Callback function for init success 
  */
 CastPlayer.prototype.onInitSuccess = function() {
+  console.log("");
   console.log("init success");
   this.updateMediaControlUI();
 };
@@ -1168,9 +1172,9 @@ var mediaJSON = { "categories" : [ { "name" : "Movies",
 // var CP = new CastPlayer();
 // console.log("CAST PLAYER IS : ", CastPlayer);
 
-//TECHNICALLY THIS SHUD WORK
-window.CastPlayer = new CastPlayer();
 //OLD SHIT
  // window.CastPlayer = CastPlayer;
  // console.log("WINDOW.CASTPLAYER = ", window.CastPlayer);
-})();
+// })();
+//TECHNICALLY THIS SHUD WORK
+window.CastPlayer = new CastPlayer();
