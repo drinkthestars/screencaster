@@ -15,6 +15,7 @@
     }
   ],
   "web_accessible_resources": ["helloVid.js"],
+  "web_accessible_resources": ["cast.js"],
   "browser_action": {
     "default_icon": "icon.png"
   }
