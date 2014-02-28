@@ -195,7 +195,7 @@ CastPlayer.prototype.sessionListener = function(e) {
       this.onMediaDiscovered('activeSession', this.session.media[0]);
     }
     else {
-      this.loadMedia(this.currentMediaIndex);
+      this.loadMedia(screenVideo);
     }
   }
 };
@@ -267,7 +267,7 @@ CastPlayer.prototype.onRequestSessionSuccess = function(e) {
   this.session = e;
   this.deviceState = DEVICE_STATE.ACTIVE;
   this.updateMediaControlUI();
-  this.loadMedia(this.currentMediaIndex);
+  this.loadMedia(screenVideo);
 };
 
 /**
@@ -307,13 +307,13 @@ CastPlayer.prototype.onStopAppSuccess = function(message) {
  * Loads media into a running receiver application
  * @param {Number} mediaIndex An index number to indicate current media content
  */
-CastPlayer.prototype.loadMedia = function(mediaIndex) {
+CastPlayer.prototype.loadMedia = function(mediaURL) {
   if (!this.session) {
     console.log("no session");
     return;
   }
-  console.log("loading..." + this.mediaContents[mediaIndex]['title']);
-  var mediaInfo = new chrome.cast.media.MediaInfo(this.mediaContents[mediaIndex]['sources'][0]);
+  console.log("loading..." + mediaURL);
+  var mediaInfo = new chrome.cast.media.MediaInfo(mediaURL);
   
   // mediaInfo.contentType = 'application/x-mpegURL';
   // mediaInfo.contentType = 'application/vnd.apple.mpegurl';
@@ -826,20 +826,21 @@ CastPlayer.prototype.updateProgressBarByTimer = function() {
  */
 CastPlayer.prototype.updateDisplayMessage = function() {
   if( this.deviceState != DEVICE_STATE.ACTIVE || this.castPlayerState == PLAYER_STATE.IDLE || this.castPlayerState == PLAYER_STATE.STOPPED ) {
-    document.getElementById("playerstate").style.display = 'none';
-    document.getElementById("playerstatebg").style.display = 'none';
-    document.getElementById("play").style.display = 'block';
-    document.getElementById("video_image_overlay").style.display = 'none';
+    // document.getElementById("playerstate").style.display = 'none';
+    // document.getElementById("playerstatebg").style.display = 'none';
+    // document.getElementById("play").style.display = 'block';
+    // document.getElementById("video_image_overlay").style.display = 'none';
     //document.getElementById("media_control").style.opacity = 0.0;
   }
   else {
-    document.getElementById("playerstate").style.display = 'block';
-    document.getElementById("playerstatebg").style.display = 'block';
-    document.getElementById("video_image_overlay").style.display = 'block';
+    // document.getElementById("playerstate").style.display = 'block';
+    // document.getElementById("playerstatebg").style.display = 'block';
+    // document.getElementById("video_image_overlay").style.display = 'block';
     //document.getElementById("media_control").style.opacity = 0.5;
   }
-  document.getElementById("playerstate").innerHTML = this.castPlayerState
-    + " on " + this.session.receiver.friendlyName;
+  // document.getElementById("playerstate").innerHTML = this.castPlayerState
+  //   + " on " + this.session.receiver.friendlyName;
+  console.log("[DEBUG] " + this.castPlayerState + " on " + this.session.receiver.friendlyName);
 }
 
 /**
@@ -847,13 +848,13 @@ CastPlayer.prototype.updateDisplayMessage = function() {
  */
 CastPlayer.prototype.updateMediaControlUI = function() {
   if( this.deviceState == DEVICE_STATE.ACTIVE ) {
-    document.getElementById("casticonactive").style.display = 'block';
-    document.getElementById("casticonidle").style.display = 'none';
+    // document.getElementById("stopcast").style.display = 'block';
+    // document.getElementById("startcast").style.display = 'none';
     var playerState = this.castPlayerState;
   }
   else {
-    document.getElementById("casticonidle").style.display = 'block';
-    document.getElementById("casticonactive").style.display = 'none';
+    // document.getElementById("startcast").style.display = 'block';
+    // document.getElementById("stopcast").style.display = 'none';
     var playerState = this.localPlayerState;
   }
 
@@ -861,15 +862,15 @@ CastPlayer.prototype.updateMediaControlUI = function() {
   {
     case PLAYER_STATE.LOADED:
     case PLAYER_STATE.PLAYING:
-      document.getElementById("play").style.display = 'none';
-      document.getElementById("pause").style.display = 'block';
+      // document.getElementById("play").style.display = 'none';
+      // document.getElementById("pause").style.display = 'block';
       break;
     case PLAYER_STATE.PAUSED:
     case PLAYER_STATE.IDLE:
     case PLAYER_STATE.LOADING:
     case PLAYER_STATE.STOPPED:
-      document.getElementById("play").style.display = 'block';
-      document.getElementById("pause").style.display = 'none';
+      // document.getElementById("play").style.display = 'block';
+      // document.getElementById("pause").style.display = 'none';
       break;
     default:
       break;
@@ -881,11 +882,11 @@ CastPlayer.prototype.updateMediaControlUI = function() {
  * @param {Number} mediaIndex An number
  */
 CastPlayer.prototype.selectMediaUpdateUI = function(mediaIndex) {
-  document.getElementById('video_image').src = MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb'];
-  document.getElementById("progress").style.width = '0px';
-  document.getElementById("media_title").innerHTML = this.mediaContents[mediaIndex]['title'];
-  document.getElementById("media_subtitle").innerHTML = this.mediaContents[mediaIndex]['subtitle'];
-  document.getElementById("media_desc").innerHTML = this.mediaContents[mediaIndex]['description'];
+  // document.getElementById('video_image').src = MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb'];
+  // document.getElementById("progress").style.width = '0px';
+  // document.getElementById("media_title").innerHTML = this.mediaContents[mediaIndex]['title'];
+  // document.getElementById("media_subtitle").innerHTML = this.mediaContents[mediaIndex]['subtitle'];
+  // document.getElementById("media_desc").innerHTML = this.mediaContents[mediaIndex]['description'];
 };
 
 /**
@@ -898,8 +899,8 @@ CastPlayer.prototype.initializeUI = function() {
   // document.getElementById("media_desc").innerHTML = this.mediaContents[this.currentMediaIndex]['description'];
 
   // // add event handlers to UI components
-  // document.getElementById("casticonidle").addEventListener('click', this.launchApp.bind(this));
-  // document.getElementById("casticonactive").addEventListener('click', this.stopApp.bind(this));
+  // document.getElementById("startcast").addEventListener('click', this.launchApp.bind(this));
+  // document.getElementById("stopcast").addEventListener('click', this.stopApp.bind(this));
   // document.getElementById("progress_bg").addEventListener('click', this.seekMedia.bind(this));
   // document.getElementById("progress").addEventListener('click', this.seekMedia.bind(this));
   // document.getElementById("progress_indicator").addEventListener('dragend', this.seekMedia.bind(this));
@@ -920,10 +921,10 @@ CastPlayer.prototype.initializeUI = function() {
   // document.addEventListener("fullscreenchange", this.changeHandler.bind(this), false);      
   // document.addEventListener("webkitfullscreenchange", this.changeHandler.bind(this), false);
 
-  // enable play/pause buttons
-  document.getElementById("play").addEventListener('click', this.playMedia.bind(this));
-  document.getElementById("pause").addEventListener('click', this.pauseMedia.bind(this));
-  document.getElementById("progress_indicator").draggable = true;
+  // // enable play/pause buttons
+  // document.getElementById("play").addEventListener('click', this.playMedia.bind(this));
+  // document.getElementById("pause").addEventListener('click', this.pauseMedia.bind(this));
+  // document.getElementById("progress_indicator").draggable = true;
 
 };
 
@@ -957,20 +958,20 @@ CastPlayer.prototype.hideMediaControl = function() {
  * Show the volume slider
  */
 CastPlayer.prototype.showVolumeSlider = function() {
-  document.getElementById('audio_bg').style.opacity = 1;
-  document.getElementById('audio_bg_track').style.opacity = 1;
-  document.getElementById('audio_bg_level').style.opacity = 1;
-  document.getElementById('audio_indicator').style.opacity = 1;
+  // document.getElementById('audio_bg').style.opacity = 1;
+  // document.getElementById('audio_bg_track').style.opacity = 1;
+  // document.getElementById('audio_bg_level').style.opacity = 1;
+  // document.getElementById('audio_indicator').style.opacity = 1;
 };    
 
 /**
  * Hide the volume stlider 
  */
 CastPlayer.prototype.hideVolumeSlider = function() {
-  document.getElementById('audio_bg').style.opacity = 0;
-  document.getElementById('audio_bg_track').style.opacity = 0;
-  document.getElementById('audio_bg_level').style.opacity = 0;
-  document.getElementById('audio_indicator').style.opacity = 0;
+  // document.getElementById('audio_bg').style.opacity = 0;
+  // document.getElementById('audio_bg_track').style.opacity = 0;
+  // document.getElementById('audio_bg_level').style.opacity = 0;
+  // document.getElementById('audio_indicator').style.opacity = 0;
 };    
 
 /**
@@ -978,13 +979,13 @@ CastPlayer.prototype.hideVolumeSlider = function() {
  */
 CastPlayer.prototype.requestFullScreen = function() {
   // Supports most browsers and their versions.
-  var element = document.getElementById("video_element");
-  var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen;
+  // var element = document.getElementById("video_element");
+  // var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen;
 
-  if (requestMethod) { // Native full screen.
-    requestMethod.call(element);
-    console.log("requested fullscreen");
-  } 
+  // if (requestMethod) { // Native full screen.
+  //   requestMethod.call(element);
+  //   console.log("requested fullscreen");
+  // } 
 };
 
 /**
@@ -992,11 +993,11 @@ CastPlayer.prototype.requestFullScreen = function() {
  */
 CastPlayer.prototype.cancelFullScreen = function() {
   // Supports most browsers and their versions.
-  var requestMethod = document.cancelFullScreen || document.webkitCancelFullScreen;
+  // var requestMethod = document.cancelFullScreen || document.webkitCancelFullScreen;
 
-  if (requestMethod) { 
-    requestMethod.call(document);
-  } 
+  // if (requestMethod) { 
+  //   requestMethod.call(document);
+  // } 
 };
 
 /**
@@ -1004,13 +1005,13 @@ CastPlayer.prototype.cancelFullScreen = function() {
  */
 CastPlayer.prototype.changeHandler = function(){                                           
   if (this.fullscreen) { 
-    document.getElementById('fullscreen_expand').style.display = 'block';
-    document.getElementById('fullscreen_collapse').style.display = 'none';
+    // document.getElementById('fullscreen_expand').style.display = 'block';
+    // document.getElementById('fullscreen_collapse').style.display = 'none';
     this.fullscreen = false;
   }
   else {
-    document.getElementById('fullscreen_expand').style.display = 'none';
-    document.getElementById('fullscreen_collapse').style.display = 'block';
+    // document.getElementById('fullscreen_expand').style.display = 'none';
+    // document.getElementById('fullscreen_collapse').style.display = 'block';
     this.fullscreen = true;
   }
 };    
@@ -1049,7 +1050,7 @@ CastPlayer.prototype.retrieveMediaJSON = function(src) {
 CastPlayer.prototype.onMediaJsonLoad = function(evt) {
   var responseJson = evt.srcElement.response;
   this.mediaContents = responseJson['categories'][0]['videos'];
-  var ni = document.getElementById('carousel');
+  // var ni = document.getElementById('carousel');
   var newdiv = null;
   var divIdName = null;
   for( var i = 0; i < this.mediaContents.length; i++ ) {
@@ -1059,7 +1060,7 @@ CastPlayer.prototype.onMediaJsonLoad = function(evt) {
     newdiv.setAttribute('class','thumb');
     newdiv.innerHTML = '<img src="' + MEDIA_SOURCE_ROOT + this.mediaContents[i]['thumb'] + '" class="thumbnail">';
     newdiv.addEventListener('click', this.selectMedia.bind(this, i));
-    ni.appendChild(newdiv);
+    // ni.appendChild(newdiv);
   }
 }
 
@@ -1075,7 +1076,7 @@ CastPlayer.prototype.onMediaJsonError = function() {
  */
 CastPlayer.prototype.addVideoThumbs = function() {
   this.mediaContents = mediaJSON['categories'][0]['videos'];
-  var ni = document.getElementById('carousel');
+  // var ni = document.getElementById('carousel');
   var newdiv = null;
   var newdivBG = null;
   var divIdName = null;
@@ -1086,7 +1087,7 @@ CastPlayer.prototype.addVideoThumbs = function() {
     newdiv.setAttribute('class','thumb');
     newdiv.innerHTML = '<img src="' + MEDIA_SOURCE_ROOT + this.mediaContents[i]['thumb'] + '" class="thumbnail">';
     newdiv.addEventListener('click', this.selectMedia.bind(this, i));
-    ni.appendChild(newdiv);
+    // ni.appendChild(newdiv);
   }
 }
 

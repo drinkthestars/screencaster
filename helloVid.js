@@ -1,6 +1,33 @@
 /**
  * global variables
  */
+/**
+ * Constants of states for Chromecast device 
+ **/
+var DEVICE_STATE = {
+  'IDLE' : 0,
+  'ACTIVE' : 1,
+  'WARNING' : 2,
+  'ERROR' : 3,
+};
+
+/**
+ * Constants of states for CastPlayer 
+ **/
+var PLAYER_STATE = {
+  'IDLE' : 'IDLE',
+  'LOADING' : 'LOADING',
+  'LOADED' : 'LOADED',
+  'PLAYING' : 'PLAYING',
+  'PAUSED' : 'PAUSED',
+  'STOPPED' : 'STOPPED',
+  'SEEKING' : 'SEEKING',
+  'ERROR' : 'ERROR'
+};
+
+var localPlayerState = PLAYER_STATE.IDLE;
+var castPlayerState = PLAYER_STATE.IDLE;
+var deviceState = DEVICE_STATE.IDLE;
 var currentMediaSession = null;
 var currentVolume = 0.5;
 var progressFlag = 1;
@@ -15,8 +42,8 @@ var mediaTitles = [
 var mediaThumbs = [
            'images/bunny.jpg',
            ];
-var currentMediaURL = mediaURLs[0];
-
+var currentMediaURL = "";
+var vid = document.getElementsByTagName('video')[0];
 /**
  * Call initialization
  */
@@ -24,6 +51,20 @@ if (!chrome.cast || !chrome.cast.isAvailable) {
   console.log("CAST OBJ NOT AVAILABLE TRYING AGAIN");
   setTimeout(initializeCastApi, 3000);
 }
+
+//TODO : Bind UI elements
+console.log("Binding elements...");
+console.log("====> video obj: ", vid);
+console.log("====> binding listeners to play/pause");
+currentMediaURL = vid.getAttribute('src');
+console.log("current vid url : " + screenVideo);
+vid.addEventListener('play', this.playMedia.bind(this));
+vid.addEventListener('pause', this.pauseMedia.bind(this));
+document.getElementById("startcast").addEventListener('click', this.launchApp.bind(this));
+document.getElementById("stopcast").addEventListener('click', this.stopApp.bind(this));
+// casticon idle = launchApp
+// 
+
 
 /**
  * initialization
@@ -121,7 +162,6 @@ function receiverListener(e) {
  * @param {string} m An index for media URL
  */
 function selectMedia(m) {
-  console.log("media selected" + m);
   appendMessage("media selected" + m);
   currentMediaURL = mediaURLs[m]; 
   var playpauseresume = document.getElementsByTagName('video')[0];
@@ -145,8 +185,18 @@ function onRequestSessionSuccess(e) {
   console.log("session success: " + e.sessionId);
   appendMessage("session success: " + e.sessionId);
   session = e;
+
+  // update media control UI --> to sync up with the cast
+  // deviceState = DEVICE_STATE.ACTIVE
+
+  /* --------- What cast.js does --------- */
+  // this.session = e;
+  // this.deviceState = DEVICE_STATE.ACTIVE;
+  // this.updateMediaControlUI();
+  // this.loadMedia(this.currentMediaIndex);
+
   // document.getElementById("casticon").src = 'images/cast_icon_active.png'; 
-  session.addUpdateListener(sessionUpdateListener.bind(this));  
+  session.addUpdateListener(sessionUpdateListener.bind(this));
 }
 
 /**
@@ -268,6 +318,34 @@ function playMedia() {
       }
     }
   }
+}
+
+/**
+ * PLAY
+ */
+function playMedia() {
+  if( !currentMediaSession ) 
+    return;
+
+  // var playpauseresume = document.getElementsByTagName('video')[0];
+  
+  if( playpauseresume.innerHTML == 'Pause' ) {
+    currentMediaSession.pause(null,
+      mediaCommandSuccessCallback.bind(this,"paused " + currentMediaSession.sessionId),
+      onError);
+    playpauseresume.innerHTML = 'Resume';
+    appendMessage("paused");
+  }
+  else {
+    if( playpauseresume.innerHTML == 'Resume' ) {
+      currentMediaSession.play(null,
+        mediaCommandSuccessCallback.bind(this,"resumed " + currentMediaSession.sessionId),
+        onError);
+      playpauseresume.innerHTML = 'Pause';
+      appendMessage("resumed");
+    }
+  }
+
 }
 
 /**
