@@ -935,8 +935,8 @@ CastPlayer.prototype.screenYahoo = function() {
   console.log("screen vid url : " + screenVideo);
   vid.addEventListener('play', this.playMedia.bind(this));
   vid.addEventListener('pause', this.pauseMedia.bind(this));
-  document.getElementById("casticonidle").addEventListener('click', this.launchApp.bind(this));
-  document.getElementById("casticonactive").addEventListener('click', this.stopApp.bind(this));
+  document.getElementById("startcast").addEventListener('click', this.launchApp.bind(this));
+  document.getElementById("stopcast").addEventListener('click', this.stopApp.bind(this));
 };
 
 /**

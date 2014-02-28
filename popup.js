@@ -22,9 +22,25 @@
   //   alert("VIDEO SEEKED");
   // });
 
-  
+  //Appending cast buttons:
+  // <button class="startcast" type="button" id="yui_3_11_0_1_1393545448446_2783">Start Cast</button>
+  // <button class="stopcast" type="button" id="yui_3_11_0_1_1393545448446_2783">Stop Cast</button>
+  var btnAttach = document.getElementsByClassName('stage-channel-name')[0];
 
+  var startBtn = document.createElement('button');
+  var stopBtn = document.createElement('button');
 
+  startBtn.innerHTML = "Start Cast";
+  stopBtn.innerHTML = "Stop Cast";
+
+  startBtn.id = "startcast";
+  stopBtn.id = "stopcast";
+
+  startBtn.type = "button";
+  stopBtn.type = "button";
+
+  btnAttach.appendChild(startBtn);
+  btnAttach.appendChild(stopBtn);
  // For your app to implement the features of Google Cast, it needs to know the 
  // location of the Google Cast Chrome Sender API library. All pages of your 
  // app must refer to the libary as follows:
