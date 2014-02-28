@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-console.log("****INSIDE CAST.JS****");
+// console.log("****INSIDE CAST.JS****");
 //THIS WHOLE BLOB IS A FUNC. YAY
 // (function() {
 
-console.log("****INSIDE CAST.JS -> FUNCTION****");
+// console.log("****INSIDE CAST.JS -> FUNCTION****");
 
 'use strict';
 
@@ -73,7 +73,7 @@ var PLAYER_STATE = {
  *  - Current media variables for transition between Cast and local modes
  */
 var CastPlayer = function() {
-  console.log("****INSIDE CAST.JS -> FUNCTION -> var CASTPLAYER****");
+  // console.log("****INSIDE CAST.JS -> FUNCTION -> var CASTPLAYER****");
   /* device variables */
   // @type {DEVICE_STATE} A state for device
   this.deviceState = DEVICE_STATE.IDLE;
@@ -117,9 +117,9 @@ var CastPlayer = function() {
   /* media contents from JSON */
   this.mediaContents = null;
 
-  console.log("=====> WHAT IS THIS", this);
+  // console.log("=====> WHAT IS THIS", this);
   this.initializeCastPlayer();
-  console.log("=====> CAST LOADDEDDDDDD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  // console.log("=====> CAST LOADDEDDDDDD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   // this.initializeLocalPlayer();
 };
 
@@ -168,7 +168,6 @@ CastPlayer.prototype.initializeCastPlayer = function() {
  * Callback function for init success 
  */
 CastPlayer.prototype.onInitSuccess = function() {
-  console.log("");
   console.log("init success");
   this.updateMediaControlUI();
 };
