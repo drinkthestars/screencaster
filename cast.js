@@ -140,7 +140,7 @@ CastPlayer.prototype.initializeLocalPlayer = function() {
  */
 CastPlayer.prototype.initializeCastPlayer = function() {
   console.log("CHROME CAST OBJ: ", chrome.cast);
-  console.log("CHROME OJB: ", chrome);
+/*   console.log("CHROME OJB: ", chrome); */
 
   if (!chrome.cast || !chrome.cast.isAvailable) {
     setTimeout(this.initializeCastPlayer.bind(this), 3000);

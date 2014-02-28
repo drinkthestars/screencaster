@@ -25,8 +25,8 @@
   //Appending cast buttons:
   // <button class="startcast" type="button" id="yui_3_11_0_1_1393545448446_2783">Start Cast</button>
   // <button class="stopcast" type="button" id="yui_3_11_0_1_1393545448446_2783">Stop Cast</button>
-  var btnAttach = document.getElementsByClassName('stage-channel-name')[0];
-
+  var btnAttach = document.getElementsByClassName('stage-channel-header')[0];
+  
   var startBtn = document.createElement('button');
   var stopBtn = document.createElement('button');
 
