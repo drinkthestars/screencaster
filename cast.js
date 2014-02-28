@@ -35,6 +35,7 @@ var MEDIA_SOURCE_URL = 'http://commondatastorage.googleapis.com/gtv-videos-bucke
  **/
 var PROGRESS_BAR_WIDTH = 600;
 
+var screenVideo = "";
 /**
  * Constants of states for Chromecast device 
  **/
@@ -930,8 +931,12 @@ CastPlayer.prototype.screenYahoo = function() {
   var vid = document.getElementsByTagName('video')[0];
   console.log("====> VIDEO OBJECT: ", vid);
   console.log("====> BINDING LISTENERS TO PLAY/PLAUSE");
+  screenVideo = vid.getAttribute('src');
+  console.log("screen vid url : " + screenVideo);
   vid.addEventListener('play', this.playMedia.bind(this));
   vid.addEventListener('pause', this.pauseMedia.bind(this));
+  document.getElementById("casticonidle").addEventListener('click', this.launchApp.bind(this));
+  document.getElementById("casticonactive").addEventListener('click', this.stopApp.bind(this));
 };
 
 /**
