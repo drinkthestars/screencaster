@@ -702,6 +702,7 @@ CastPlayer.prototype.muteMedia = function() {
  * @param {Event} e An event object from seek 
  */
 CastPlayer.prototype.seekMedia = function(event) {
+  console.log("=========== INSIDE SEEK MEDIA !");
   var pos = parseInt(event.offsetX);
   // var pi = document.getElementById("progress_indicator"); 
   // var p = document.getElementById("progress"); 
@@ -729,22 +730,26 @@ CastPlayer.prototype.seekMedia = function(event) {
   }
 
   //====================CAST
+/*
   if( this.castPlayerState != PLAYER_STATE.PLAYING && this.castPlayerState != PLAYER_STATE.PAUSED ) {
     return;
   }
+*/
+  var vid = document.getElementsByTagName('video')[0];
+  var currTime = vid.currentTime;
+  console.log("current seek -> " , currTime);
   
-  console.log("current seek -> " , curr);
-  
-  this.currentMediaTime = curr;
+/*   this.currentMediaTime = curr; */
+/*
   console.log('Seeking ' + this.currentMediaSession.sessionId + ':' +
     this.currentMediaSession.mediaSessionId + ' to ' + pos + "%");
+*/
   
   //CAST SEEK REQ
   var request = new chrome.cast.media.SeekRequest();
-  request.currentTime = this.currentMediaTime;
-  this.currentMediaSession.seek(request,
-    this.onSeekSuccess.bind(this, 'media seek done'),
-    this.onError.bind(this));
+  //SENDIGN SEEK TIME TO CAST
+  request.currentTime = currTime;
+  this.currentMediaSession.seek(request, this.onSeekSuccess.bind(this, 'media seek done'), this.onError.bind(this));
   this.castPlayerState = PLAYER_STATE.SEEKING;
 
   this.updateDisplayMessage();
@@ -756,6 +761,7 @@ CastPlayer.prototype.seekMedia = function(event) {
  * @param {String} info A string that describe seek event
  */
 CastPlayer.prototype.onSeekSuccess = function(info) {
+  console.log("SEEEEK SUCCC !!");
   console.log(info);
   this.castPlayerState = PLAYER_STATE.PLAYING;
   this.updateDisplayMessage();
@@ -953,20 +959,10 @@ CastPlayer.prototype.screenYahoo = function() {
   //Volume
   vid.addEventListener('volumechange', this.volTrial.bind(this));
   
-  
-  // document.getElementById("audio_on").addEventListener('click', this.muteMedia.bind(this));
-  // document.getElementById("audio_off").addEventListener('click', this.muteMedia.bind(this));
-  // document.getElementById("audio_bg").addEventListener('mouseover', this.showVolumeSlider.bind(this));
-  // document.getElementById("audio_on").addEventListener('mouseover', this.showVolumeSlider.bind(this));
-  // document.getElementById("audio_bg_level").addEventListener('mouseover', this.showVolumeSlider.bind(this));
-  // document.getElementById("audio_bg_track").addEventListener('mouseover', this.showVolumeSlider.bind(this));
-
-  // document.getElementById("audio_bg").addEventListener('mouseout', this.hideVolumeSlider.bind(this));
-  // document.getElementById("audio_on").addEventListener('mouseout', this.hideVolumeSlider.bind(this));
-  
-  
   // Seek
-  // document.getElementById("progress_bg").addEventListener('click', this.seekMedia.bind(this));
+  vid.addEventListener('seeked', this.seekMedia.bind(this));
+/*   vid.addEventListener('seeked', this.seekedTrial.bind(this)); */
+/*   document.getElementById("progress_bg").addEventListener('click', this.seekMedia.bind(this)); */
   // document.getElementById("progress").addEventListener('click', this.seekMedia.bind(this));
   // document.getElementById("progress_indicator").addEventListener('dragend', this.seekMedia.bind(this));
 };
@@ -986,6 +982,10 @@ CastPlayer.prototype.volTrial = function() {
 		this.mediaCommandSuccessCallback.bind(this),
 		this.onError.bind(this));
 	}
+}; 
+
+CastPlayer.prototype.seekedTrial = function(e) {
+	console.log("SEEKED ? : ", e);
 }; 
 
 /**
