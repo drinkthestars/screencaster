@@ -428,14 +428,17 @@ CastPlayer.prototype.onLoadMediaError = function(e) {
  * @param {!Boolean} e true/false
  */
 CastPlayer.prototype.onMediaStatusUpdate = function(e) {
+  console.log("onMediaStatusUpdate: ", e);
   if( e == false ) {
     this.currentMediaTime = 0;
-    this.castPlayerState = PLAYER_STATE.IDLE;
+/*     this.castPlayerState = PLAYER_STATE.IDLE; */
   }
   console.log("updating media");
+/*
   this.updateProgressBar(e);
   this.updateDisplayMessage();
   this.updateMediaControlUI();
+*/
 };
 
 /**
@@ -725,13 +728,18 @@ CastPlayer.prototype.seekMedia = function(event) {
     // pi.style.marginLeft = pp + 'px';
   }
 
+  //====================CAST
   if( this.castPlayerState != PLAYER_STATE.PLAYING && this.castPlayerState != PLAYER_STATE.PAUSED ) {
     return;
   }
-
+  
+  console.log("current seek -> " , curr);
+  
   this.currentMediaTime = curr;
   console.log('Seeking ' + this.currentMediaSession.sessionId + ':' +
     this.currentMediaSession.mediaSessionId + ' to ' + pos + "%");
+  
+  //CAST SEEK REQ
   var request = new chrome.cast.media.SeekRequest();
   request.currentTime = this.currentMediaTime;
   this.currentMediaSession.seek(request,
@@ -933,11 +941,52 @@ CastPlayer.prototype.screenYahoo = function() {
   console.log("====> BINDING LISTENERS TO PLAY/PLAUSE");
   screenVideo = vid.getAttribute('src');
   console.log("screen vid url : " + screenVideo);
+  
+  // Play/Pause
   vid.addEventListener('play', this.playMedia.bind(this));
   vid.addEventListener('pause', this.pauseMedia.bind(this));
+  
+  // start/stop casting
   document.getElementById("startcast").addEventListener('click', this.launchApp.bind(this));
   document.getElementById("stopcast").addEventListener('click', this.stopApp.bind(this));
+  
+  //Volume
+  vid.addEventListener('volumechange', this.volTrial.bind(this));
+  
+  
+  // document.getElementById("audio_on").addEventListener('click', this.muteMedia.bind(this));
+  // document.getElementById("audio_off").addEventListener('click', this.muteMedia.bind(this));
+  // document.getElementById("audio_bg").addEventListener('mouseover', this.showVolumeSlider.bind(this));
+  // document.getElementById("audio_on").addEventListener('mouseover', this.showVolumeSlider.bind(this));
+  // document.getElementById("audio_bg_level").addEventListener('mouseover', this.showVolumeSlider.bind(this));
+  // document.getElementById("audio_bg_track").addEventListener('mouseover', this.showVolumeSlider.bind(this));
+
+  // document.getElementById("audio_bg").addEventListener('mouseout', this.hideVolumeSlider.bind(this));
+  // document.getElementById("audio_on").addEventListener('mouseout', this.hideVolumeSlider.bind(this));
+  
+  
+  // Seek
+  // document.getElementById("progress_bg").addEventListener('click', this.seekMedia.bind(this));
+  // document.getElementById("progress").addEventListener('click', this.seekMedia.bind(this));
+  // document.getElementById("progress_indicator").addEventListener('dragend', this.seekMedia.bind(this));
 };
+
+CastPlayer.prototype.volTrial = function() {
+	var vid = document.getElementsByTagName('video')[0];
+	var newVol = vid.volume;
+	console.log("VOL CHANGED: ", newVol);
+	
+	if( newVol > 0 ) {
+		this.session.setReceiverVolumeLevel(newVol,
+			this.mediaCommandSuccessCallback.bind(this),
+			this.onError.bind(this));
+	}
+	else {
+		this.session.setReceiverMuted(true,
+		this.mediaCommandSuccessCallback.bind(this),
+		this.onError.bind(this));
+	}
+}; 
 
 /**
  * Show the media control 
